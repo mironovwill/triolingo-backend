@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -15,25 +16,52 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     try {
       const user = this.usersRepository.create(createUserDto);
-      return await this.usersRepository.save(user);
-    } catch (error) {
-      throw error;
+      await this.usersRepository.save(user);
+      return plainToInstance(User, user, {
+        excludeExtraneousValues: true,
+      });
+    } catch (e) {
+      throw e;
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.usersRepository.update(id, updateUserDto);
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    try {
+      return await this.usersRepository.update(id, updateUserDto);
+    } catch (e) {
+      throw e;
+    }
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<User[]> {
+    try {
+      const users = await this.usersRepository.find();
+
+      return plainToInstance(User, users, {
+        excludeExtraneousValues: true,
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+  async findOne(id: number): Promise<User | null> {
+    try {
+      const user = await this.usersRepository.findOneBy({ id });
+
+      return plainToInstance(User, user, {
+        excludeExtraneousValues: true,
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+    try {
+      await this.usersRepository.delete(id);
+    } catch (e) {
+      throw e;
+    }
   }
 }

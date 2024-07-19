@@ -8,20 +8,18 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
+@ApiTags('Users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    try {
-      return this.userService.create(createUserDto);
-    } catch (e) {
-      console.log(e);
-    }
+    return this.userService.create(createUserDto);
   }
 
   @Get()

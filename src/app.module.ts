@@ -16,7 +16,6 @@ import { User } from './user/entities/user.entity';
       database: process.env.POSTGRESQL_DBNAME,
       entities: [User],
       synchronize: process.env.NODE_ENV === 'dev',
-      logging: 'all',
     }),
     UserModule,
   ],
